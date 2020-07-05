@@ -29,7 +29,7 @@ public class ResponseEntityExceptionHandler
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public final ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex,
 			WebRequest request) {
-
+		
 		return new ResponseEntity<Object>(new ResponseMessage(ex.getMessage()), HttpStatus.UNAUTHORIZED);
 
 	}

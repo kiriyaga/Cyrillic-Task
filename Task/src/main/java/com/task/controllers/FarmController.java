@@ -33,15 +33,16 @@ public class FarmController {
 	 * It is possible to send requests that will filter the return result. 
 	 * Example of a query:
 	 * /farms?search=id:1001
+     * @see https://github.com/sipios/spring-search
 	 * @param specs - search criteria
 	 * @return list of filtered farms
 	 */
 	@PreAuthorize("@securityService.hasProtectedAccess('USER_WHO_CAN_GET_ALL_FARMS_FROM_ALL_USERS')")
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getAllCustomers(@SearchSpec Specification<Farm> specs) {
+	public ResponseEntity<?> getAllCustomers(@SearchSpec Specification<Farm> specifications) {
 
 		logger.info(Messages.getLoggerMessage(OperationEnum.Entered, FarmController.class));
-		return new ResponseEntity<>(farmService.getAll(specs), HttpStatus.OK);
+		return new ResponseEntity<>(farmService.getAll(specifications), HttpStatus.OK);
 	}
 
 }

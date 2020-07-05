@@ -35,15 +35,16 @@ public class CustomerController {
 	 * It is possible to send requests that will filter the return result. 
 	 * Example of a query:
 	 * /customer?search=firstName:'Admin' AND username:'admin'
+	 * @see https://github.com/sipios/spring-search
 	 * @param specs - search criteria
 	 * @return list of filtered customers
 	 */
-	@PreAuthorize("@securityService.hasProtectedAccess('USER_WHO_CAN_GET_ALL_USERS')")
+	@PreAuthorize("@securityService.hasProtectedAccess('USER_WHO_CAN_GET_ALL_CUSTOMERS')")
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getAllCustomers(@SearchSpec Specification<Customer> specs) {
+	public ResponseEntity<?> getAllCustomers(@SearchSpec Specification<Customer> specifications) {
 
 		logger.info(Messages.getLoggerMessage(OperationEnum.Entered, UserController.class));
-		return new ResponseEntity<>(customerService.getAll(specs), HttpStatus.OK);
+		return new ResponseEntity<>(customerService.getAll(specifications), HttpStatus.OK);
 	}
 	
 	/**

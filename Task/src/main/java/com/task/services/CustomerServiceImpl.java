@@ -10,6 +10,7 @@ import com.task.beans.Customer;
 import com.task.beans.Farm;
 import com.task.repositories.AccountRepository;
 import com.task.repositories.CustomerRepository;
+import com.task.repositories.FarmRepository;
 
 import lombok.NonNull;
 
@@ -21,32 +22,27 @@ public class CustomerServiceImpl implements CustomerService, CrudService<Custome
 
 	@Autowired
 	CustomerRepository customerRepository;
+	
+	@Autowired
+	FarmRepository farmRepository;
 
 	@Override
-	public List<Account> getAccountsFromCustomer(String username) {
+	public List<Account> getAccountsFromCustomer(@NonNull String username) {
 
-		@NonNull
-		Customer customer = customerRepository.findByUsername(username);
-		return customer.getAccounts();
+		List<Account> accounts = accountRepository.findCustomerAccount(username);
+		return accounts;
 	}
 
 	@Override
-	public List<Farm> getFarmsFromCustomerAccount(String username, Long accountId) {
+	public List<Farm> getFarmsFromCustomerAccount(@NonNull String username, @NonNull Long accountId) {
 
-		@NonNull
-		Customer customer = customerRepository.findByUsername(username);
-		@NonNull
-		Account account = accountRepository.getOne(accountId);
-
-		if (customer.getAccounts().contains(account))
-			return account.getFarms();
-
-		return null;
+		List<Farm> farms = farmRepository.findCustomerFarmsForAccount(username, accountId);
+		return farms;
 	}
 
 	@Override
-	public List<Customer> getAll(Specification<Customer> specs) {
+	public List<Customer> getAll(Specification<Customer> specifications) {
 
-		return customerRepository.findAll(Specification.where(specs));
+		return customerRepository.findAll(Specification.where(specifications));
 	}
 }

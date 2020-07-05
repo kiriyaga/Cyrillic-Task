@@ -5,9 +5,10 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.task.beans.User;
 import com.task.repositories.UserRepository;
 import com.task.validators.interfaces.UsernameExist;
+
+import lombok.NonNull;
 
 public class UsernameExistValidator implements ConstraintValidator<UsernameExist, String> {
 
@@ -15,13 +16,8 @@ public class UsernameExistValidator implements ConstraintValidator<UsernameExist
 	UserRepository userRepository;
 
 	@Override
-	public boolean isValid(String value, ConstraintValidatorContext context) {
+	public boolean isValid(@NonNull String value, ConstraintValidatorContext context) {
 
-		if (value == null)
-			return false;
-		User user = userRepository.findByUsername(value);
-		if (user == null)
-			return false;
-		return true;
+		return userRepository.checkifUserExist(value);
 	}
 }

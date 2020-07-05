@@ -3,13 +3,11 @@ package com.task.controllers;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,15 +36,16 @@ public class UserController {
 	 * It is possible to send requests that will filter the return result. 
 	 * Example of a query:
 	 * /users?search=firstName:'Admin' AND username:'admin'
-	 * @param specs - search criteria
+	 * @see https://github.com/sipios/spring-search
+	 * @param specifications - search criteria
 	 * @return list of filtered users
 	 */
 	@PreAuthorize("@securityService.hasProtectedAccess('USER_WHO_CAN_GET_ALL_USERS')")
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getAllUseres(@SearchSpec Specification<User> specs) {
+	public ResponseEntity<?> getAllUseres(@SearchSpec Specification<User> specifications) {
 
 		logger.info(Messages.getLoggerMessage(OperationEnum.Entered, UserController.class));
-		return new ResponseEntity<>(userService.getAll(specs), HttpStatus.OK);	
+		return new ResponseEntity<>(userService.getAll(specifications), HttpStatus.OK);	
 	}
 	
 	/**

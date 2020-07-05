@@ -16,8 +16,8 @@ public class FarmServiceImpl implements CrudService<Farm> {
 	FarmRepository farmRepository;
 
 	@Override
-	public List<Farm> getAll(Specification<Farm> specs) {
+	public List<Farm> getAll(Specification<Farm> specifications) {
 		
-		return farmRepository.findAll(Specification.where(specs));
+		return farmRepository.findAll(Specification.where(specifications));
 	}
 }

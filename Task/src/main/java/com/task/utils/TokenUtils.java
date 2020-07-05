@@ -30,7 +30,6 @@ public class TokenUtils {
 	private Date generateCurrentDate() {
 
 		return new Date(System.currentTimeMillis());
-
 	}
 
 	public Date getExpirationDateFromToken(String token) {
@@ -42,8 +41,7 @@ public class TokenUtils {
 		} catch (Exception e) {
 			expiration = null;
 		}
-		return expiration;
-		
+		return expiration;		
 	}
 
 	private Claims getClaimsFromToken(String token) {
@@ -54,14 +52,12 @@ public class TokenUtils {
 		} catch (Exception e) {
 			claims = null;
 		}
-		return claims;
-		
+		return claims;	
 	}
 
 	private Date generateExpirationDate() {
 
 		return new Date(System.currentTimeMillis() + this.expiration * 1000);
-
 	}
 
 	public String generateToken(User user) {
@@ -71,14 +67,14 @@ public class TokenUtils {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		claims.put("sub", userDetails.getUsername());
 		String role = "";
-		for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
+		
+		for (GrantedAuthority grantedAuthority : userDetails.getAuthorities())
 			role += grantedAuthority;
-		}
+		
 		claims.put("role", role);
 		claims.put("created", this.generateCurrentDate());
 		claims.put("iat", new UUID(10, 10));
 		return this.generateToken(claims);
-
 	}
 
 	private String generateToken(Map<String, Object> claims) {
@@ -90,22 +86,19 @@ public class TokenUtils {
 		} catch (UnsupportedEncodingException ex) {
 
 			return Jwts.builder().setClaims(claims).setExpiration(this.generateExpirationDate())
-					.signWith(SignatureAlgorithm.HS256, this.secret).compact();
-			
+					.signWith(SignatureAlgorithm.HS256, this.secret).compact();		
 		}
 	}
 
 	private Boolean isTokenExpired(String token) {
 
 		final Date expiration = this.getExpirationDateFromToken(token);
-		return expiration.before(this.generateCurrentDate());
-		
+		return expiration.before(this.generateCurrentDate());	
 	}
 
 	public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
 
 		return (!(this.isTokenExpired(token)));
-
 	}
 
 	public String refreshToken(String token) {
@@ -118,8 +111,7 @@ public class TokenUtils {
 		} catch (Exception e) {
 			refreshedToken = null;
 		}
-		return refreshedToken;
-		
+		return refreshedToken;		
 	}
 	
 	public String getUsernameFromToken(String token) {
@@ -131,8 +123,7 @@ public class TokenUtils {
 		} catch (Exception e) {
 			username = null;
 		}
-		return username;
-		
+		return username;		
 	}
 	
 	public String getRole(String token) {
@@ -144,8 +135,7 @@ public class TokenUtils {
 		} catch (Exception e) {
 			created = null;
 		}
-		return created;
-		
+		return created;		
 	}
 	
 
@@ -153,15 +143,13 @@ public class TokenUtils {
 		
 		SecurityUser user = (SecurityUser) userDetails;
 		final String username = this.getUsernameFromToken(token);
-		return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)));
-		
+		return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)));		
 	}
 	
 	public Boolean validateToken(String token, User user) {
 		
 		final String username = this.getUsernameFromToken(token);
-		return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)));
-		
+		return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)));		
 	}
 	
 
