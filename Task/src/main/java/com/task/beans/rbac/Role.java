@@ -10,28 +10,42 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import com.task.beans.Account;
+import com.task.beans.Farm;
+import com.task.utils.logger.Messages;
+import com.task.utils.logger.OperationEnum;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class Role {
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+	private static final Logger logger = LogManager.getLogger(Role.class);
 
-    @Column(nullable = false)
-    protected String name;
-    
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    protected List<PrivilegeEnum> privileges;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected long id;
+
+	@Column(nullable = false)
+	protected String name;
+
+	@ElementCollection
+	@Enumerated(EnumType.STRING)
+	protected List<PrivilegeEnum> privileges;
 
 	public Role(String name) {
 		super();
 		this.name = name;
+		logger.info(Messages.getLoggerMessage(OperationEnum.Created, Role.class));
 	}
 
 }

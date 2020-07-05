@@ -64,7 +64,9 @@ public class TokenUtils {
 
 	}
 
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(User user) {
+		
+		SecurityUser userDetails = SecurityUserFactory.create(user);
 
 		Map<String, Object> claims = new HashMap<String, Object>();
 		claims.put("sub", userDetails.getUsername());

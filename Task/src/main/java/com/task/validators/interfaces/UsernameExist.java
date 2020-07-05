@@ -12,16 +12,17 @@ import javax.validation.Payload;
 
 import com.task.validators.UsernameExistValidator;
 
-@Target({FIELD})
+@Target({ FIELD })
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = { UsernameExistValidator.class })
 public @interface UsernameExist {
 
-	 String message() default "Username: {value} already exist!";
-	    Class<?>[] groups() default { };
-	    Class<? extends Payload>[] payload() default { };
-	    
-	    String value();
-	    
+	String message() default "Username: {value} already exist!";
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
+
+	String value();
 }

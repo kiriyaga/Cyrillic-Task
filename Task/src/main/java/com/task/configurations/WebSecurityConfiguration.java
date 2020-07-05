@@ -24,18 +24,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.task.filters.AuthenticationTokenFilter;
 import com.task.services.security.SecurityService;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private SecurityService securityService;
-	
+
 	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
@@ -45,7 +44,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
 	public SecurityService securityService() {
 		return this.securityService;
@@ -64,10 +63,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return authenticationTokenFilter;
 	}
 
-	
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
-		
+
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*"));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
@@ -78,20 +76,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-		httpSecurity.csrf().disable()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests()
-				.antMatchers(HttpMethod.OPTIONS, "/api/h2/**").permitAll()
-				.antMatchers(HttpMethod.OPTIONS, "/api/**").authenticated().and().addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
-				.cors();
+		httpSecurity.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/api/h2/**").permitAll()
+				.antMatchers(HttpMethod.OPTIONS, "/api/**").authenticated().and()
+				.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class).cors();
 		httpSecurity.headers().cacheControl();
 		httpSecurity.headers().frameOptions().disable();
-		
 	}
-	
 
 }

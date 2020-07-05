@@ -24,7 +24,7 @@ import com.task.services.security.UserDetailsServiceImpl;
 import com.task.utils.TokenUtils;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
-	
+
 	@Value("${token.header}")
 	private String tokenHeader;
 
@@ -41,20 +41,19 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader(this.tokenHeader);
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		
+
 		if (username != null) {
 			SecurityUser userDetails = (SecurityUser) this.userDetailsService.loadUserByUsername(username);
 			if (this.tokenUtils.validateToken(authToken, userDetails)) {
 				Collection<? extends GrantedAuthority> authorities;
 				String role = this.tokenUtils.getRole(authToken);
 				authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(role);
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), authToken, authorities);
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails.getUsername(), authToken, authorities);
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		}
 		chain.doFilter(request, response);
-
 	}
-	
 }

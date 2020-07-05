@@ -10,20 +10,18 @@ import com.task.repositories.UserRepository;
 import com.task.validators.interfaces.UsernameExist;
 
 public class UsernameExistValidator implements ConstraintValidator<UsernameExist, String> {
-	
+
 	@Autowired
 	UserRepository userRepository;
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		
-		if(value == null)
+
+		if (value == null)
 			return false;
 		User user = userRepository.findByUsername(value);
-		if(user == null)
-			return true;
-		return false;
-			
+		if (user == null)
+			return false;
+		return true;
 	}
-
 }
